@@ -1,0 +1,89 @@
+{% load static from staticfiles %}
+<html>
+	<head>
+		<title>Dostawcy jedzenia - panel administracyjny</title>
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style1.css' %}">
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>		
+	</head>
+	<body style="background-image: url({% static 'img/background7.jpeg'%}) ;">
+		<div id='PAGE' style="background-image: url({% static 'img/background.png' %})">
+			<div id="NAV">
+				{% if user.is_authenticated %}
+					{{user.username}} | <a href='/logout/'>Wyloguj</a> | <a href='/'>Strona główna</a> |
+					{% if user.is_superuser%}
+						<a href="/admin/">Panel administracyny</a> | 
+					{%endif%}
+				{% else %}
+					| <a href='/login/'>Zaloguj</a> | <a href='/'>Powrót</a> |
+				{% endif %}
+			</div>
+			<div id='HEADER'>
+				<div id='HEADER_CONTENT'>
+					Poinformuj o przybyciu dostawcy
+				</div>
+			</div>
+			
+			<div id='MAIN'>
+			
+				{% if prov_fail %}
+					<div class='report_alert'>
+						Proszę wskazać dostawcę!
+					</div>
+				{% endif %}
+				
+				<form method='POST' action='/report_visit/'>
+					{%csrf_token%}
+					<div class='row'>
+					{% for provider in providers %}
+						<div class="col-sm-6 col-md-4">
+							<div class='PROVIDER_REPORT' ID='{{provider.shortcut}}_ID_DIV'>
+								<div class='PROVIDER_REPORT_RADIO'>
+									<input type='radio' name = 'provider' value = '{{provider.shortcut}}' id = '{{provider.shortcut}}_ID' class='provider_radio'/>
+								</div>
+								<label for='{{provider.shortcut}}_ID'>
+									<div class='logo_main_report'>
+										<div class='report'>
+												<img src="{{ provider.logo }}" alt='{{ provider.name }}' class='report_visit_img'/>
+										</div>
+										<div class='report_caption'>
+											<figcaption class='report'> 
+												{{provider.name}}
+											</figcaption>
+										</div>
+									</div>
+								</label>
+							</div>
+						</div>
+					{% endfor %}
+					</div>
+					<div class='row'>
+						<div class='col-md-4 offset-md-4'>
+							<div class='FLOOR_REPORT'>Piętro: 
+								<select name='floor'>
+									<option>0</option>
+									<option>10</option>
+									<option>11</option>
+									<option>12</option>
+									<option selected>13</option>
+									<option>14</option>
+								</select>
+							</div>							
+								<input type='checkbox' name = 'form_sent' style="display: none;" checked>
+								<input type='submit' value='Wyślij!' />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$('.PROVIDER_REPORT').click(function() {
+				$('input[name="provider"]', this).prop("checked",true);
+				$('.PROVIDER_REPORT').removeClass('PROVIDER_REPORT_checked');
+				$(this).addClass('PROVIDER_REPORT_checked');
+			});
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<script src="{% static 'js/bootstrap.min.js'%}"></script>
+	</body>
+</html>

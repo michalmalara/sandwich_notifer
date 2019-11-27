@@ -1,0 +1,39 @@
+{% load static from staticfiles %}
+
+<html>
+	<head>
+		<title>Dostawcy jedzenia</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style1.css' %}">
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	</head>
+	<body style="background-image: url({% static 'img/background7.jpeg'%}) ;">
+		<div id='PAGE' style="background-image: url({% static 'img/background.png' %})">
+			<div id="NAV">
+				{% if user.is_authenticated %}
+					{{user.username}} | <a href='/logout/'>Wyloguj</a> | <a href='/'>Strona główna</a> | 
+					{% if user.is_superuser%}
+						<a href="/admin/">Panel administracyny</a> | 
+					{%endif%}
+				{% else %}
+					| <a href='/login/'>Zaloguj</a> | <a href='/'>Powrót</a> |
+				{% endif %}
+			</div>
+			<div id='HEADER'>
+				<div id='HEADER_CONTENT'>
+					Dostawcy jedzenia
+				</div>
+			</div>
+			
+			<div id='MAIN'>
+				<div id='LOGIN_FORM'>
+				Dodaj nowego dostawcę
+					<form method='POST' action='/login_view/'>
+						{%csrf_token%}
+						{{ form.as_p }}
+						<input type = 'submit' value='Dodaj' action='/new_provider/'/>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

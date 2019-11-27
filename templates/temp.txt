@@ -1,0 +1,13 @@
+				{% for provider in providers %}
+					<div class='PROVIDER_REPORT'>
+						<a href='/report_visit?provider={{provider.shortcut}}' >
+							<div class='prov_main' >
+								<div class='logo_main'>
+									<figure><img src="{% static 'img/'%}{{provider.shortcut}}.png" alt='{{ provider.name }}' /></figure>
+									<figcaption>{{provider.name}}</figcaption>
+								</div>
+							</div>
+						</a>
+					</div>			
+				
+				{% endfor %}
